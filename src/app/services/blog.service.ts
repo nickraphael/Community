@@ -12,7 +12,7 @@ export class BlogService {
 
     constructor(private angularFire: AngularFire) { 
         this.blogs$ = angularFire.database.list('/blogs').map(res => <Blog>res.json());
-        
+         
     } 
 
 }
