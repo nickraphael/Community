@@ -1,0 +1,15 @@
+<p-dialog header="New Blog" [(visible)]="isVisible" [responsive]="true" showEffect="fade" [modal]="true" width="425">
+  <form [formGroup]="blogForm" (ngSubmit)="onSubmitForm()">
+    <h2>Blog Form</h2>
+
+    <label for="name">Name:</label>
+    <input id="name" type="text" formControlName="name">
+    <p *ngIf="!blogForm.controls.name.pristine && blogForm.controls.name.errors">This field is required!</p>
+
+    <label for="url">Url:</label>
+    <input id="url" type="text" formControlName="url">
+    <p *ngIf="!blogForm.controls.url.pristine && blogForm.controls.url.errors">This field is required!</p>
+
+    <button type="submit">Submit</button>
+  </form>
+</p-dialog>
