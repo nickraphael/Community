@@ -17,7 +17,7 @@ const tabMenuRoutes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'podcasts', 
+    redirectTo: 'blogs', 
     pathMatch: 'full'
   }
 ];

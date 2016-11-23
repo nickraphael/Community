@@ -1,5 +1,5 @@
 <button #loadButton type="text" icon="fa-plus" pButton label="Add New" (click)="addNew()"></button>
-<p-dataScroller [value]="blogs" [rows]="2" [loader]="loadButton">
+<p-dataScroller [value]="visibleBlogs" [rows]=2 [loader]="loadButton" (onLazyLoad)="loadData($event)" [lazy]="true">
     <header>
         Click Load Button at Footer to Load More
     </header>    

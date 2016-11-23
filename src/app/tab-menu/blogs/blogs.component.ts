@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BlogService } from '../../services/blog.service'
+import { Blog } from '../../models/blog.model';
 
 
 @Component({
@@ -9,17 +10,31 @@ import { BlogService } from '../../services/blog.service'
 })
 export class BlogsComponent implements OnInit {
     
-    blogs: any[];
-    blog: any = null;
+    blogs: Blog[];
+    blog: Blog;
+    visibleBlogs: Blog[];
     displayEdit: boolean = false;
+    visibleRows: number = 2;
 
     constructor(private _blogService: BlogService) {
     }
 
     ngOnInit() {
-        this._blogService.blogs$.subscribe((value: any[]) => {
+        this._blogService.blogs$.subscribe((value: Blog[]) => {
                 this.blogs = value;
+                this.displayRows()
             });
+    }
+
+    loadData(event) {
+        if(this.blogs != undefined) {
+            this.visibleRows = this.visibleRows + event.rows;
+            this.displayRows();
+        }
+    }
+
+    displayRows() {
+        this.visibleBlogs = this.blogs.slice(0, this.visibleRows);        
     }
 
     addNew() {
@@ -27,7 +42,7 @@ export class BlogsComponent implements OnInit {
         this.displayEdit = true;
     }
 
-    editBlog(blog: any) {
+    editBlog(blog: Blog) {
         this.blog = blog;
         this.displayEdit = true;
     }

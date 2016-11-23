@@ -18,12 +18,12 @@ export class EditBlogComponent implements OnInit {
         private _blogService: BlogService,
         private _formBuilder: FormBuilder) { }
 
-    ngOnInit() {
+    ngOnInit() {        
         this.blogForm = this._formBuilder.group(
             {
-                name: [this.blog.name, Validators.required],
-                url: [this.blog.url, Validators.required]
-            });
+                name: [this.blog == null ? '' : this.blog.name, Validators.required],
+                url: [this.blog == null ? '' : this.blog.url, Validators.required]
+            });        
     }
 
     onSubmitForm() {
