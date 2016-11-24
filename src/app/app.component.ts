@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
-import { TabMenuComponent } from './tab-menu/tab-menu.component'
+import { GrowlService } from './services/growl.service';
+import { Growl } from './models/growl.model';
 
 @Component({
   selector: 'app-root',
@@ -9,5 +10,11 @@ import { TabMenuComponent } from './tab-menu/tab-menu.component'
 })
 export class AppComponent {
   title = 'ngCommunity';
+
+  growlMessages: Growl[];
+
+  constructor(private _GrowlService: GrowlService) {
+
+  }
 
 }

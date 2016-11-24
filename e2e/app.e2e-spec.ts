@@ -1,7 +1,8 @@
+import {} from 'jasmine';
 import { CommunityPage } from './app.po';
 import { browser, element, by } from 'protractor';
 
-describe('sapphire App', function() {
+describe('Community App', function() {
   let page: CommunityPage;
   var ptor;
 
