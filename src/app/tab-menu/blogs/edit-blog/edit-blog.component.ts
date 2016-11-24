@@ -30,8 +30,22 @@ export class EditBlogComponent implements OnInit {
     }
 
     onSubmitForm() {
-        //this._blogService.blogs$.push(this.blogForm.value);
-        this._GrowlService.addGrowl(new Growl("success", "Blog saved", "xxx"));
+        this._blogService.blogs$.push(this.blogForm.value)
+            .then(blog => {
+                let messageDetail = 'Thanks for taking the time to let us know about the ' 
+                    + this.blogForm.controls['name'].value + ' blog!';
+                this._GrowlService.addGrowl(new Growl('success', 'Blog saved', messageDetail));
+
+                this.isVisible = false;
+            },
+            err => {
+                console.log(err);
+                let messageDetail = 'Oops, something just went awry.  Please try again, it might just be a glitch in the matrix.';
+                this._GrowlService.addGrowl(new Growl('error', 'Save Failed :-(', messageDetail));
+            });
+
+
+        
     }
 
 }
