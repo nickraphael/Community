@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BlogService } from '../../services/blog.service'
+import { BlogService } from '../../services/blog.service';
 import { Blog } from '../../models/blog.model';
 
 
@@ -11,7 +11,7 @@ import { Blog } from '../../models/blog.model';
 export class BlogsComponent implements OnInit {
     
     blogs: Blog[];
-    blog: Blog;
+    blog: Blog = null;
     visibleBlogs: Blog[];
     displayEdit: boolean = false;
     visibleRows: number = 2;
@@ -34,7 +34,7 @@ export class BlogsComponent implements OnInit {
     }
 
     displayRows() {
-        this.visibleBlogs = this.blogs.slice(0, this.visibleRows);        
+        this.visibleBlogs = this.blogs.slice(0, this.visibleRows);
     }
 
     addNew() {
@@ -47,9 +47,9 @@ export class BlogsComponent implements OnInit {
         this.displayEdit = true;
     }
 
-    blogEditClosed() {
+    blogEditVisibilityChanged(isVisible) {
         this.blog = null;
-        this.displayEdit = false;
+        this.displayEdit = isVisible;
     }
 
 

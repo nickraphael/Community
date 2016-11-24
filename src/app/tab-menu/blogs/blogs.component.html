@@ -43,4 +43,4 @@
         <button #loadButton type="text" icon="fa-refresh" pButton label="Load"></button>
     </footer>
 </p-dataScroller>
-<app-edit-blog [blog]="blog" [isVisible]="displayEdit" (onPopupClose)="blogEditClosed()">
+<app-edit-blog [blog]="blog" [isVisible]="displayEdit" (visibilityChanged)="blogEditVisibilityChanged($event)">

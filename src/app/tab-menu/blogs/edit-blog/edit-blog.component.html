@@ -1,4 +1,4 @@
-<p-dialog header="New Blog" [(visible)]="isVisible" [responsive]="true" showEffect="fade" [modal]="true" width="425">
+<p-dialog header="New Blog" (onBeforeShow)="onBeforeShow()" (onBeforeHide)="onBeforeHide()" [(visible)]="isVisible" [responsive]="true" showEffect="fade" [modal]="true" width="425">
   <form [formGroup]="blogForm" (ngSubmit)="onSubmitForm()">
     <h2>Blog Form</h2>
 
