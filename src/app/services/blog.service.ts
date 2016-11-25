@@ -16,4 +16,22 @@ export class BlogService {
         this.blogs$ = angularFire.database.list('/blogs');
     } 
 
+    addBlog(_blog: Blog) {        
+        //add new blog
+        return this.blogs$.push({
+            name: _blog.name,
+            url: _blog.url
+        });        
+    }
+
+    updateBlog(_blog: Blog) {
+        //update blog in db
+        let value = this.angularFire.database.object('/blogs/' + _blog.$key);
+
+        return value.update({
+            name: _blog.name,
+            url: _blog.url
+        });
+    }
+
 }

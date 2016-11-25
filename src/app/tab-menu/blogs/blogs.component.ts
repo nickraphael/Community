@@ -20,10 +20,11 @@ export class BlogsComponent implements OnInit {
     }
 
     ngOnInit() {
-        this._blogService.blogs$.subscribe((value: Blog[]) => {
+        this._blogService.blogs$.subscribe((value: any[]) => {
+                //this.blogs = value.map(v => new Blog(v.$key, v.name, v.url, v.imageUrl));
                 this.blogs = value;
                 this.displayRows()
-            });
+            }); 
     }
 
     loadData(event) {
@@ -38,7 +39,7 @@ export class BlogsComponent implements OnInit {
     }
 
     addNew() {
-        this.blog = null;
+        this.blog = new Blog('', '', '', '');
         this.displayEdit = true;
     }
 
