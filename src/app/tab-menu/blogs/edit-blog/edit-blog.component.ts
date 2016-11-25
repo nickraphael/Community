@@ -24,28 +24,20 @@ export class EditBlogComponent implements OnInit {
         private _GrowlService: GrowlService) { }
 
     ngOnInit() {
+        this.blog =  new Blog('', '', '', '');
+        this.setFormBindings();        
+    }
+
+    setFormBindings() {
         this.blogForm = this._formBuilder.group(
             {
-                name: ['', Validators.required],
-                url: ['', Validators.required]
+                name: [this.blog.name, Validators.required],
+                url: [this.blog.url, Validators.required]
             });
     }
 
     onBeforeShow() {
-        if(this.blog != null) {
-            this.blogForm = this._formBuilder.group(
-                {
-                    name: [this.blog.name, Validators.required],
-                    url: [this.blog.url, Validators.required]
-                });
-        }
-        else {
-            this.blogForm = this._formBuilder.group(
-                {
-                    name: ['', Validators.required],
-                    url: ['', Validators.required]
-                });
-        }
+        this.setFormBindings();
     }
 
     onBeforeHide() {
