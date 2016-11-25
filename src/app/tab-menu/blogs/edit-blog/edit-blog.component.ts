@@ -24,7 +24,7 @@ export class EditBlogComponent implements OnInit {
         private _GrowlService: GrowlService) { }
 
     ngOnInit() {
-        this.blog =  new Blog('', '', '', '');
+        this.blog =  new Blog('', '', '', '', 0);
         this.setFormBindings();        
     }
 

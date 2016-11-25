@@ -39,7 +39,7 @@ export class BlogsComponent implements OnInit {
     }
 
     addNew() {
-        this.blog = new Blog('', '', '', '');
+        this.blog = new Blog('', '', '', '', 0);
         this.displayEdit = true;
     }
 

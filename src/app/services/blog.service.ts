@@ -18,20 +18,23 @@ export class BlogService {
 
     addBlog(_blog: Blog) {        
         //add new blog
-        return this.blogs$.push({
-            name: _blog.name,
-            url: _blog.url
-        });        
+        return this.blogs$.push(this.getDbObjectFromBlog(_blog));        
     }
 
     updateBlog(_blog: Blog) {
         //update blog in db
         let value = this.angularFire.database.object('/blogs/' + _blog.$key);
 
-        return value.update({
-            name: _blog.name,
-            url: _blog.url
-        });
+        return value.update(this.getDbObjectFromBlog(_blog));
     }
 
+    getDbObjectFromBlog(_blog: Blog): Object {
+        return {
+            name: _blog.name,
+            url: _blog.url != null ? _blog.url : '',
+            imageUrl: _blog.imageUrl != null ? _blog.imageUrl : '',
+            followers: _blog.followers != null ? _blog.followers : 0,
+            dateAdded: _blog.dateAdded != null ? _blog.dateAdded : new Date()
+        };
+    }
 }
