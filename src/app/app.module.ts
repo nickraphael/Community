@@ -6,7 +6,7 @@ import { FormsModule, FormGroup, FormControl, ReactiveFormsModule } from '@angul
 import { HttpModule } from '@angular/http';
 
 import { ButtonModule, TabMenuModule, DataScrollerModule, PanelModule, DialogModule, GrowlModule } from 'primeng/primeng';
-import { AngularFireModule } from 'angularfire2';
+import { AngularFireModule, AuthProviders, AuthMethods } from 'angularfire2';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule  } from './app-routing.module';
@@ -26,6 +26,11 @@ export const firebaseConfig = {
     messagingSenderId: "106766101224"
 };
 
+const myFirebaseAuthConfig = {
+  provider: AuthProviders.Google,
+  method: AuthMethods.Redirect
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,7 +44,7 @@ export const firebaseConfig = {
     FormsModule,
     HttpModule,
     RouterModule,
-    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireModule.initializeApp(firebaseConfig, myFirebaseAuthConfig),
     AppRoutingModule,
     TabMenuRoutingModule,
     TabMenuModule,
