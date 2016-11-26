@@ -2,7 +2,10 @@ import { Component } from '@angular/core';
 import { AngularFire } from 'angularfire2';
 
 import { GrowlService } from './services/growl.service';
+import { LoginService } from './services/login.service';
 import { Growl } from './models/growl.model';
+import { LoginComponent } from './login/login.component';
+import { User } from './models/user';
 
 @Component({
     selector: 'app-root',
@@ -11,25 +14,18 @@ import { Growl } from './models/growl.model';
 })
 export class AppComponent {
     title = 'ngCommunity';
+    user: User = null;
 
     growlMessages: Growl[];
 
-    constructor(public _angularFire: AngularFire, private _GrowlService: GrowlService) { 
-        this._angularFire.auth.subscribe(auth => console.log(auth));
-    }
-
-    login() {
-        this._angularFire.auth.login()
-        .then(value => {
-            let d = value;
-        })
-        .catch(error => {
-            let hj = error;
-        })
+    constructor(public _loginService: LoginService, private _GrowlService: GrowlService) { 
+        _loginService.user$.subscribe((user: User) => {
+            this.user = user;
+        });
     }
 
     logout() {
-        let y = this._angularFire.auth.logout();
+        this._loginService.logout();
     }
 
 }

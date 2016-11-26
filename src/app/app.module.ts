@@ -17,6 +17,8 @@ import { PodcastsComponent } from './tab-menu/podcasts/podcasts.component';
 import { EditBlogComponent } from './tab-menu/blogs/edit-blog/edit-blog.component';
 import { BlogService } from './services/blog.service';
 import { GrowlService } from './services/growl.service';
+import { LoginComponent } from './login/login.component';
+import { LoginService } from './services/login.service'
 
 export const firebaseConfig = {
     apiKey: "AIzaSyB69Vk-VszeZWpisLcqzZ3FLRVCSdk8Xrg",
@@ -37,7 +39,8 @@ const myFirebaseAuthConfig = {
     TabMenuComponent,
     BlogsComponent,
     PodcastsComponent,
-    EditBlogComponent
+    EditBlogComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +58,7 @@ const myFirebaseAuthConfig = {
     GrowlModule,
     ReactiveFormsModule
   ],
-  providers: [AngularFireModule, BlogService, GrowlService],
+  providers: [AngularFireModule, BlogService, GrowlService, LoginService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

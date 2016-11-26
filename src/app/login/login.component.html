@@ -1,0 +1,13 @@
+
+<button (click)="openLoginPage()">login</button>
+<p-dialog 
+    header="Login" 
+    (onBeforeHide)="onBeforeHide()" 
+    [(visible)]="isVisible" 
+    [responsive]="true" 
+    showEffect="fade" 
+    [modal]="true" 
+    width="425">
+
+    <button (click)="googleClick()">google</button>
+</p-dialog>

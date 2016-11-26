@@ -2,7 +2,8 @@
 <h1>
   {{title}}
 </h1>
-<div> {{ (_angularFire.auth | async)?.uid }} </div>
-<button (click)="login()">Login</button>
+<app-login></app-login>
+<div> {{ user?.displayname }} </div>
+<img style="height: 70px;" [src]="user?.photoUrl" [hidden]="user == null">
 <button (click)="logout()">Logout</button>
 <app-tab-menu></app-tab-menu>
