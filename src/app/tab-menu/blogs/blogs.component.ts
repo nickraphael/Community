@@ -20,9 +20,8 @@ export class BlogsComponent implements OnInit {
     }
 
     ngOnInit() {
-        this._blogService.blogs$.subscribe((value: any[]) => {
-                //this.blogs = value.map(v => new Blog(v.$key, v.name, v.url, v.imageUrl));
-                this.blogs = value;
+        this._blogService.blogs$.subscribe((blogs: Blog[]) => {
+                this.blogs = blogs;
                 this.displayRows()
             }); 
     }
@@ -51,6 +50,10 @@ export class BlogsComponent implements OnInit {
     blogEditVisibilityChanged(isVisible) {
         this.blog = null;
         this.displayEdit = isVisible;
+    }
+
+    follow(blog: Blog) {
+
     }
 
 

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFire, AuthProviders, AuthMethods } from 'angularfire2';
-import { Observable, ReplaySubject } from 'rxjs'
+import { Observable, ReplaySubject } from 'rxjs';
 
-import { User } from '../models/user'
+import { User } from '../models/user.model';
 
 type loginProvider =
     "google";
@@ -19,7 +19,8 @@ export class LoginService {
 
             if (auth != null) {
                 //logged in
-                let user: User = new User();                
+                let user: User = new User();  
+                user.authKey = auth.auth.uid;      
                 user.displayName = auth.auth.displayName;
                 user.photoUrl = auth.auth.photoURL;
 

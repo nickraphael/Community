@@ -18,7 +18,8 @@ import { EditBlogComponent } from './tab-menu/blogs/edit-blog/edit-blog.componen
 import { BlogService } from './services/blog.service';
 import { GrowlService } from './services/growl.service';
 import { LoginComponent } from './login/login.component';
-import { LoginService } from './services/login.service'
+import { LoginService } from './services/login.service';
+import { FollowingComponent } from './tab-menu/following/following.component'
 
 export const firebaseConfig = {
     apiKey: "AIzaSyB69Vk-VszeZWpisLcqzZ3FLRVCSdk8Xrg",
@@ -40,7 +41,8 @@ const myFirebaseAuthConfig = {
     BlogsComponent,
     PodcastsComponent,
     EditBlogComponent,
-    LoginComponent
+    LoginComponent,
+    FollowingComponent
   ],
   imports: [
     BrowserModule,

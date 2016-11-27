@@ -2,11 +2,16 @@
 import { NgModule }     from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { TabMenuComponent } from './tab-menu.component'
-import { BlogsComponent } from './blogs/blogs.component'
-import { PodcastsComponent } from './podcasts/podcasts.component'
+import { TabMenuComponent } from './tab-menu.component';
+import { BlogsComponent } from './blogs/blogs.component';
+import { PodcastsComponent } from './podcasts/podcasts.component';
+import { FollowingComponent } from './following/following.component';
 
 const tabMenuRoutes: Routes = [
+  {
+    path: 'following',
+    component: FollowingComponent
+  },
   {
     path: 'blogs',
     component: BlogsComponent
