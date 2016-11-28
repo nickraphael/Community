@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, OnB } from '@angular/core';
 import { Observable, ReplaySubject, Subscription } from 'rxjs';
 
 import { BlogService } from '../../services/blog.service'
@@ -13,17 +13,17 @@ export class FollowingComponent implements OnInit {
 
   private blogsSubscription: Subscription;
 
-  constructor(private blogService: BlogService) { 
-
-  }
-
-  ngOnInit() {
+  constructor(private blogService: BlogService) {
     this.blogsSubscription = this.blogService.blogsFollowed$.subscribe(x => {
       console.log(x);
     })
   }
 
-  ngOnDestroy(){
+  ngOnInit() {
+
+  }
+
+  ngOnDestroy() {
     this.blogsSubscription.unsubscribe();
   }
 

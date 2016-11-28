@@ -13,7 +13,7 @@ import { User } from '../models/user.model';
 export class BlogService {
 
     public blogs$: Observable<Blog[]>;
-    public blogsFollowed$: Observable<Blog[]>;
+    public blogsFollowed$: Observable<Blog[]> = Observable.from([]);
 
     private firebaseBlogs$: FirebaseListObservable<Blog[]>;
 
@@ -30,35 +30,47 @@ export class BlogService {
                 this.blogsFollowed$ = Observable.from([]);
             }
             else {
-
-                this.blogsFollowed$ = angularFire.database.list('/users/'+ user.authKey + '/blogs')
-                    .map((blogsFollowed: any[]) => {
-                        blogsFollowed.map(blogFollowed => {
-                            blogFollowed.blog = angularFire.database.object('/blogs/' + blogFollowed.$key)
-                                .subscribe((fireBlog: any) => {
-                                    blogFollowed.blog = new Blog(fireBlog.$key, fireBlog.name, fireBlog.url, fireBlog.imageUrl, fireBlog.followers);
-                                });        
+                this.blogsFollowed$ = angularFire.database.list('/users/' + user.authKey + '/blogs')
+                    .map(followedBlogs => {
+                        return followedBlogs.map(followedBlog => {
+                            return angularFire.database.object('/blogs/' + followedBlog.$key)
+                                .map(c => {
+                                    followedBlog = c;
+                                });
                         });
-                        return blogsFollowed;
                     });
-/*
-this.projects = this.af.database.list(`projects`)
-  .map(projects => {
-    return projects.map(project => {
-      project.customers.map(customer => {
-        this.af.database.list(`customers`)
-          .subscribe(c => {
-            customer = c;
-          });
-      });
-      return project;
-    });
-  });
-*/
 
-                    //.subscribe((blogs : Blog[]) => { 
-                    //    this.blogsFollowed$.next(blogs) 
-                    //});
+
+                /*
+                                this.blogsFollowed$ = angularFire.database.list('/users/'+ user.authKey + '/blogs')
+                                    .map((blogsFollowed: any[]) => {
+                                        blogsFollowed.map(blogFollowed => {
+                                            blogFollowed.blog = angularFire.database.object('/blogs/' + blogFollowed.$key)
+                                                .flatMap((fireBlog: any) => {
+                                                    blogFollowed.blog = new Blog(fireBlog.$key, fireBlog.name, fireBlog.url, fireBlog.imageUrl, fireBlog.followers);
+                                                });        
+                                        });
+                                        return blogsFollowed;
+                                    });
+                                    */
+                /*
+                this.projects = this.af.database.list(`projects`)
+                  .map(projects => {
+                    return projects.map(project => {
+                      project.customers.map(customer => {
+                        this.af.database.list(`customers`)
+                          .subscribe(c => {
+                            customer = c;
+                          });
+                      });
+                      return project;
+                    });
+                  });
+                */
+
+                //.subscribe((blogs : Blog[]) => { 
+                //    this.blogsFollowed$.next(blogs) 
+                //});
 
             }
         });
