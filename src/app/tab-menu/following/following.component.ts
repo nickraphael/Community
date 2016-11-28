@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
 
 import { BlogService } from '../../services/blog.service'
 import { Blog } from '../../models/blog.model';
@@ -11,22 +11,20 @@ import { Blog } from '../../models/blog.model';
 })
 export class FollowingComponent implements OnInit {
 
-  private blogs$: Observable<Blog[]>;
+  private blogsSubscription: Subscription;
 
   constructor(private blogService: BlogService) { 
 
   }
 
   ngOnInit() {
-    this.blogs$ = this.blogService.blogsFollowed$;
-    
-    this.blogs$.subscribe(x => {
+    this.blogsSubscription = this.blogService.blogsFollowed$.subscribe(x => {
       console.log(x);
     })
   }
 
   ngOnDestroy(){
-    //this.blogs$.unsubscribe();
+    this.blogsSubscription.unsubscribe();
   }
 
 }

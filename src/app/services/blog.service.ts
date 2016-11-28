@@ -27,7 +27,7 @@ export class BlogService {
 
         loginService.user$.subscribe((user: User) => {
             if (user === null) {
-                this.blogsFollowed$ = null;
+                this.blogsFollowed$ = Observable.from([]);
             }
             else {
 

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
+
 import { BlogService } from '../../services/blog.service';
 import { Blog } from '../../models/blog.model';
 
@@ -9,25 +11,31 @@ import { Blog } from '../../models/blog.model';
     styleUrls: ['./blogs.component.css']
 })
 export class BlogsComponent implements OnInit {
-    
+
     blogs: Blog[];
     blog: Blog = null;
     visibleBlogs: Blog[];
     displayEdit: boolean = false;
     visibleRows: number = 2;
 
+    private blogsSubscription: Subscription;
+
     constructor(private _blogService: BlogService) {
     }
 
     ngOnInit() {
-        this._blogService.blogs$.subscribe((blogs: Blog[]) => {
-                this.blogs = blogs;
-                this.displayRows()
-            }); 
+        this.blogsSubscription = this._blogService.blogs$.subscribe((blogs: Blog[]) => {
+            this.blogs = blogs;
+            this.displayRows()
+        });
+    }
+
+    ngOnDestroy() {
+        this.blogsSubscription.unsubscribe();
     }
 
     loadData(event) {
-        if(this.blogs != undefined) {
+        if (this.blogs != undefined) {
             this.visibleRows = this.visibleRows + event.rows;
             this.displayRows();
         }

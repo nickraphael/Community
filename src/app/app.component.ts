@@ -5,7 +5,7 @@ import { GrowlService } from './services/growl.service';
 import { LoginService } from './services/login.service';
 import { Growl } from './models/growl.model';
 import { LoginComponent } from './login/login.component';
-import { User } from './models/user';
+import { User } from './models/user.model';
 
 @Component({
     selector: 'app-root',
