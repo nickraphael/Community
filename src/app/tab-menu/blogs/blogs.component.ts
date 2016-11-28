@@ -61,7 +61,7 @@ export class BlogsComponent implements OnInit {
     }
 
     follow(blog: Blog) {
-
+        this._blogService.follow(blog);
     }
 
 

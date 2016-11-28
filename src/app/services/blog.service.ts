@@ -8,17 +8,20 @@ import 'rxjs/add/operator/switchMap';
 import { Blog } from '../models/blog.model';
 import { LoginService } from './login.service'
 import { User } from '../models/user.model';
+import { UserBlog } from '../models/userBlog.model';
 
 @Injectable()
 export class BlogService {
 
     public blogs$: Observable<Blog[]>;
-    public blogsFollowed$: Observable<Blog[]> = Observable.from([]);
+    public blogsFollowed$: Observable<any> = Observable.from([]);
 
     private firebaseBlogs$: FirebaseListObservable<Blog[]>;
+    private firebaseUserBlogs$: FirebaseListObservable<UserBlog[]> = null;
 
     constructor(private angularFire: AngularFire, private loginService: LoginService) {
         this.firebaseBlogs$ = angularFire.database.list('/blogs');
+        
 
         this.blogs$ = this.firebaseBlogs$
             .map((fireBlogs: any) => {
@@ -30,16 +33,29 @@ export class BlogService {
                 this.blogsFollowed$ = Observable.from([]);
             }
             else {
+                this.firebaseUserBlogs$ = angularFire.database.list('/users/' + user.authKey + '/blogs');
+
                 this.blogsFollowed$ = angularFire.database.list('/users/' + user.authKey + '/blogs')
-                    .map(followedBlogs => {
+                  .map(followedBlogs => {
+                    return followedBlogs.map(followedBlog => {
+                        angularFire.database.object('/blogs/' + followedBlog.key)
+                          .subscribe(c => {
+                            followedBlog = c;
+                          });
+                      });
+                    });
+
+/*
+                this.blogsFollowed$ = angularFire.database.list('/users/' + user.authKey + '/blogs')
+                    .switchMap(followedBlogs => {
                         return followedBlogs.map(followedBlog => {
-                            return angularFire.database.object('/blogs/' + followedBlog.$key)
-                                .map(c => {
-                                    followedBlog = c;
+                            return angularFire.database.object('/blogs/' + followedBlog.key)
+                                .flatMap((value: any, index: number) => {
+                                    return value as any;
                                 });
                         });
                     });
-
+*/
 
                 /*
                                 this.blogsFollowed$ = angularFire.database.list('/users/'+ user.authKey + '/blogs')
@@ -78,27 +94,34 @@ export class BlogService {
 
     addBlog(_blog: Blog) {
         //add new blog
-        return this.firebaseBlogs$.push(this.getDbObjectFromBlog(_blog));
-    }
-
-    updateBlog(_blog: Blog) {
-        //update blog in db
-        let value = this.angularFire.database.object('/blogs/' + _blog.$key);
-
-        return value.update(this.getDbObjectFromBlog(_blog));
-    }
-
-    getDbObjectFromBlog(_blog: Blog): Object {
-        return {
+        return this.firebaseBlogs$.push({
             name: _blog.name,
             url: _blog.url != null ? _blog.url : '',
             imageUrl: _blog.imageUrl != null ? _blog.imageUrl : '',
             followers: _blog.followers != null ? _blog.followers : 0,
             dateAdded: _blog.dateAdded != null ? _blog.dateAdded : new Date()
-        };
+        });
     }
 
-    follow() {
+    updateBlog(_blog: Blog) {
+        //update blog in db
+        let value = this.angularFire.database.object('/blogs/' + _blog.key);
 
+        return value.update({
+            name: _blog.name,
+            url: _blog.url != null ? _blog.url : '',
+            imageUrl: _blog.imageUrl != null ? _blog.imageUrl : '',
+            followers: _blog.followers != null ? _blog.followers : 0,
+            dateAdded: _blog.dateAdded != null ? _blog.dateAdded : new Date().toISOString()
+        });
+    }
+
+    follow(_blog: Blog) {
+        if(this.firebaseUserBlogs$ !== null) {
+            this.firebaseUserBlogs$.push({
+                blogKey: _blog.key,
+                dateAdded: new Date().toISOString()
+            });
+        }
     }
 }

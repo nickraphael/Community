@@ -25,7 +25,9 @@ export class EditBlogComponent implements OnInit {
 
     ngOnInit() {
         this.blog =  new Blog('', '', '', '', 0);
-        this.setFormBindings();        
+        this.setFormBindings();  
+
+        //loginService.user$.subscribe((user: User) => {      
     }
 
     setFormBindings() {
@@ -48,7 +50,7 @@ export class EditBlogComponent implements OnInit {
     onSubmitForm() {
         this.getValuesFromForm();
         
-        if(this.blog.$key != '') {
+        if(this.blog.key != '') {
             this.updateBlog();
         }
         else {
