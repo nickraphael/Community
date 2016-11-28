@@ -24,7 +24,9 @@ export class LoginService {
                 user.displayName = auth.auth.displayName;
                 user.photoUrl = auth.auth.photoURL;
 
-                this.user$.next(user);
+                this.RegisterUserIfNeeded(user);
+
+                this.user$.next(user);                
             }
             else {
                 // logged out
@@ -53,6 +55,21 @@ export class LoginService {
 
     logout() {
         this._angularFire.auth.logout();
+    }
+
+    RegisterUserIfNeeded(user: User) {
+        //check if user if in db
+        this._angularFire.database.object('/users/' + user.authKey)
+            .subscribe((existingUser: any) => {
+                if(!existingUser.$exists()) {
+                    this._angularFire.database.list('/users').push({
+                        authKey: user.authKey,
+                        displayName: user.displayName,
+                        photoURL: user.photoUrl,
+                        dateAdded: new Date().toISOString()
+                    });
+                }
+            });
     }
 
 }

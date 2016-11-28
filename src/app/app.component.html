@@ -3,7 +3,7 @@
   {{title}}
 </h1>
 <app-login></app-login>
-<div> {{ user?.displayname }} </div>
+<div> {{ user?.displayName }} </div>
 <img style="height: 70px;" [src]="user?.photoUrl" [hidden]="user == null">
 <button (click)="logout()">Logout</button>
 <app-tab-menu></app-tab-menu>
