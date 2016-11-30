@@ -11,16 +11,17 @@ import { Blog } from '../../models/blog.model';
 })
 export class FollowingComponent implements OnInit {
 
+  blogs: Blog[] = [];
   private blogsSubscription: Subscription;
 
   constructor(private blogService: BlogService) {
-    this.blogsSubscription = this.blogService.blogsFollowed$.subscribe(x => {
-      console.log(x);
-    })
+
   }
 
   ngOnInit() {
-
+    this.blogsSubscription = this.blogService.blogsFollowed$.subscribe((blogs: Blog[]) => {
+      this.blogs = blogs;
+    });
   }
 
   ngOnDestroy() {
