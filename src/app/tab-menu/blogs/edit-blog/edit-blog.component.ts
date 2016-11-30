@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { BlogService } from '../../../services/blog.service';
@@ -11,7 +11,7 @@ import { Growl } from '../../../models/growl.model';
     templateUrl: './edit-blog.component.html',
     styleUrls: ['./edit-blog.component.css']
 })
-export class EditBlogComponent implements OnInit {
+export class EditBlogComponent implements OnInit, OnChanges {
     @Input() blog: Blog;
     @Input() isVisible: boolean;
     @Output() visibilityChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -28,6 +28,10 @@ export class EditBlogComponent implements OnInit {
         this.setFormBindings();  
 
         //loginService.user$.subscribe((user: User) => {      
+    }
+
+    ngOnChanges() {
+
     }
 
     setFormBindings() {

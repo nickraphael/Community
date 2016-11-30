@@ -21,7 +21,7 @@ export class BlogService {
 
     constructor(private angularFire: AngularFire, private loginService: LoginService) {
         this.firebaseBlogs$ = angularFire.database.list('/blogs');
-        
+
 
         this.blogs$ = this.firebaseBlogs$
             .map((fireBlogs: any) => {
@@ -33,29 +33,45 @@ export class BlogService {
                 this.blogsFollowed$ = Observable.from([]);
             }
             else {
-                this.firebaseUserBlogs$ = angularFire.database.list('/users/' + user.authKey + '/blogs');
+                this.firebaseUserBlogs$ = this.angularFire.database.list('/users/' + user.authKey + '/blogs');
 
                 this.blogsFollowed$ = angularFire.database.list('/users/' + user.authKey + '/blogs')
-                  .map(followedBlogs => {
-                    return followedBlogs.map(followedBlog => {
-                        angularFire.database.object('/blogs/' + followedBlog.key)
-                          .subscribe(c => {
-                            followedBlog = c;
-                          });
-                      });
+                    .map(followedBlogs => {
+                        return followedBlogs.map(followedBlog => {
+                            return this.angularFire.database.object('/blogs/' + followedBlog.blogKey)
+                        });                        
+                    })
+                    .do(console.log)
+                    // map over each array of observable and merge them into one stream and combine the observables into one 
+                    .mergeMap((followedBlog$: any) => {
+                        return Observable.combineLatest(followedBlog$)
                     });
 
 /*
-                this.blogsFollowed$ = angularFire.database.list('/users/' + user.authKey + '/blogs')
-                    .switchMap(followedBlogs => {
-                        return followedBlogs.map(followedBlog => {
-                            return angularFire.database.object('/blogs/' + followedBlog.key)
-                                .flatMap((value: any, index: number) => {
-                                    return value as any;
-                                });
+                getContactsJoin(key) {
+                    // get a list of customerKeys for company
+                    return this.af.database.list(`/company_contacts/${key}`)
+                        // map over each array from firebase and use the customer key to get the contact object
+                        .map(contacts => contacts.map(contact => this.af.database.object(`/contacts/${contact.$key}`)))
+                        // console.log with out a side effect
+                        .do(console.log)
+                        // map over each array of observable and merge them into one stream and combine the observables into one 
+                        .mergeMap((contacts$: any) => {
+                            return Observable.combineLatest(contacts$)
                         });
-                    });
-*/
+                }
+
+                
+                                this.blogsFollowed$ = angularFire.database.list('/users/' + user.authKey + '/blogs')
+                                    .switchMap(followedBlogs => {
+                                        return followedBlogs.map(followedBlog => {
+                                            return angularFire.database.object('/blogs/' + followedBlog.key)
+                                                .flatMap((value: any, index: number) => {
+                                                    return value as any;
+                                                });
+                                        });
+                                    });
+                */
 
                 /*
                                 this.blogsFollowed$ = angularFire.database.list('/users/'+ user.authKey + '/blogs')
@@ -117,7 +133,7 @@ export class BlogService {
     }
 
     follow(_blog: Blog) {
-        if(this.firebaseUserBlogs$ !== null) {
+        if (this.firebaseUserBlogs$ !== null) {
             this.firebaseUserBlogs$.push({
                 blogKey: _blog.key,
                 dateAdded: new Date().toISOString()
