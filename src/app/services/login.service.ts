@@ -11,6 +11,7 @@ type loginProvider =
 export class LoginService {
 
     public user$: ReplaySubject<User> = new ReplaySubject<User>(1);
+    public user: User;
 
     constructor(private _angularFire: AngularFire) {
         this._angularFire.auth.subscribe(auth => {
@@ -19,19 +20,19 @@ export class LoginService {
 
             if (auth != null) {
                 //logged in
-                let user: User = new User();  
-                user.authKey = auth.auth.uid;      
-                user.displayName = auth.auth.displayName;
-                user.photoUrl = auth.auth.photoURL;
+                this.user = new User();  
+                this.user.authKey = auth.auth.uid;      
+                this.user.displayName = auth.auth.displayName;
+                this.user.photoUrl = auth.auth.photoURL;
 
-                this.RegisterUserIfNeeded(user);
-
-                this.user$.next(user);                
+                this.SaveUserIfNeeded(this.user);
             }
             else {
                 // logged out
-                this.user$.next(null);
-            }            
+                this.user = null;
+            }   
+
+            this.user$.next(this.user);          
         });
     }
 
@@ -57,13 +58,12 @@ export class LoginService {
         this._angularFire.auth.logout();
     }
 
-    RegisterUserIfNeeded(user: User) {
+    SaveUserIfNeeded(user: User) {
         //check if user if in db
         this._angularFire.database.object('/users/' + user.authKey)
             .subscribe((existingUser: any) => {
                 if(!existingUser.$exists()) {
-                    this._angularFire.database.list('/users').push({
-                        authKey: user.authKey,
+                    this._angularFire.database.object('/users/' + user.authKey).set({
                         displayName: user.displayName,
                         photoURL: user.photoUrl,
                         dateAdded: new Date().toISOString()

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, Observer } from 'rxjs';
 
 import 'rxjs/add/operator/switchMap';
 
@@ -14,7 +14,8 @@ import { UserBlog } from '../models/userBlog.model';
 export class BlogService {
 
     public blogs$: Observable<Blog[]>;
-    public blogsFollowed$: Observable<any> = Observable.from([]);
+    public blogsFollowed$: Observable<Blog[]>;
+    public blogsFollowedObserver: Observer<Blog[]> = null;
 
     private firebaseBlogs$: FirebaseListObservable<Blog[]>;
     private firebaseUserBlogs$: FirebaseListObservable<UserBlog[]> = null;
@@ -22,6 +23,7 @@ export class BlogService {
     constructor(private angularFire: AngularFire, private loginService: LoginService) {
         this.firebaseBlogs$ = angularFire.database.list('/blogs');
 
+        this.blogsFollowed$ = new Observable<Blog[]>(observer => this.blogsFollowedObserver = observer);
 
         this.blogs$ = this.firebaseBlogs$
             .map((fireBlogs: any) => {
@@ -30,82 +32,38 @@ export class BlogService {
 
         loginService.user$.subscribe((user: User) => {
             if (user === null) {
-                this.blogsFollowed$ = Observable.from([]);
+                this.blogsFollowedObserver.next([]);
             }
             else {
                 this.firebaseUserBlogs$ = this.angularFire.database.list('/users/' + user.authKey + '/blogs');
 
-                this.blogsFollowed$ = angularFire.database.list('/users/' + user.authKey + '/blogs')
-                    .map(followedBlogs => {
-                        return followedBlogs.map(followedBlog => {
-                            return this.angularFire.database.object('/blogs/' + followedBlog.blogKey)
-                        });                        
-                    })
-                    .do(console.log)
-                    // map over each array of observable and merge them into one stream and combine the observables into one 
-                    .mergeMap((followedBlog$: any) => {
-                        return Observable.combineLatest(followedBlog$)
-                    });
-
-/*
-                getContactsJoin(key) {
-                    // get a list of customerKeys for company
-                    return this.af.database.list(`/company_contacts/${key}`)
-                        // map over each array from firebase and use the customer key to get the contact object
-                        .map(contacts => contacts.map(contact => this.af.database.object(`/contacts/${contact.$key}`)))
-                        // console.log with out a side effect
-                        .do(console.log)
-                        // map over each array of observable and merge them into one stream and combine the observables into one 
-                        .mergeMap((contacts$: any) => {
-                            return Observable.combineLatest(contacts$)
-                        });
+                if (this.blogsFollowedObserver != null) {
+                    this.getFollowedBlogs();
                 }
-
-                
-                                this.blogsFollowed$ = angularFire.database.list('/users/' + user.authKey + '/blogs')
-                                    .switchMap(followedBlogs => {
-                                        return followedBlogs.map(followedBlog => {
-                                            return angularFire.database.object('/blogs/' + followedBlog.key)
-                                                .flatMap((value: any, index: number) => {
-                                                    return value as any;
-                                                });
-                                        });
-                                    });
-                */
-
-                /*
-                                this.blogsFollowed$ = angularFire.database.list('/users/'+ user.authKey + '/blogs')
-                                    .map((blogsFollowed: any[]) => {
-                                        blogsFollowed.map(blogFollowed => {
-                                            blogFollowed.blog = angularFire.database.object('/blogs/' + blogFollowed.$key)
-                                                .flatMap((fireBlog: any) => {
-                                                    blogFollowed.blog = new Blog(fireBlog.$key, fireBlog.name, fireBlog.url, fireBlog.imageUrl, fireBlog.followers);
-                                                });        
-                                        });
-                                        return blogsFollowed;
-                                    });
-                                    */
-                /*
-                this.projects = this.af.database.list(`projects`)
-                  .map(projects => {
-                    return projects.map(project => {
-                      project.customers.map(customer => {
-                        this.af.database.list(`customers`)
-                          .subscribe(c => {
-                            customer = c;
-                          });
-                      });
-                      return project;
-                    });
-                  });
-                */
-
-                //.subscribe((blogs : Blog[]) => { 
-                //    this.blogsFollowed$.next(blogs) 
-                //});
-
             }
         });
+    }
+
+    getFollowedBlogs(){ //callback) {
+        if (this.loginService.user != null) {
+            this.angularFire.database.list('/users/' + this.loginService.user.authKey + '/blogs')
+                .map(followedBlogs => {
+                    return followedBlogs.map(followedBlog => {
+                        return this.angularFire.database.object('/blogs/' + followedBlog.blogKey)
+                    });
+                })
+                .do(console.log)
+                // map over each array of observable and merge them into one stream and combine the observables into one 
+                .mergeMap((followedBlog$: any) => {
+                    return Observable.combineLatest(followedBlog$)
+                })
+                .subscribe((blogs: Blog[]) => {
+                    //callback(blogs);
+                    this.blogsFollowedObserver.next(blogs);
+                    //if (this.blogsFollowedObserver != null)
+                    //this.blogsFollowedObserver.next(blogs);
+                });
+        }
     }
 
     addBlog(_blog: Blog) {
