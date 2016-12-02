@@ -92,11 +92,16 @@ export class BlogService {
     }
 
     follow(_blog: Blog) {
+        // add user/blogs entry
         if (this.firebaseUserBlogs$ !== null) {
             this.firebaseUserBlogs$.push({
                 blogKey: _blog.key,
                 dateAdded: new Date().toISOString()
             });
         }
+
+        // update blog entry to increment follow
+        _blog.followers ++;
+        this.updateBlog(_blog);
     }
 }
