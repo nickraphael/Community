@@ -44,7 +44,7 @@ export class BlogService {
         });
     }
 
-    getFollowedBlogs(){ //callback) {
+    getFollowedBlogs() {
         if (this.loginService.user != null) {
             this.angularFire.database.list('/users/' + this.loginService.user.authKey + '/blogs')
                 .map(followedBlogs => {
@@ -58,10 +58,7 @@ export class BlogService {
                     return Observable.combineLatest(followedBlog$)
                 })
                 .subscribe((blogs: Blog[]) => {
-                    //callback(blogs);
                     this.blogsFollowedObserver.next(blogs);
-                    //if (this.blogsFollowedObserver != null)
-                    //this.blogsFollowedObserver.next(blogs);
                 });
         }
     }
@@ -74,7 +71,11 @@ export class BlogService {
             imageUrl: _blog.imageUrl != null ? _blog.imageUrl : '',
             followers: _blog.followers != null ? _blog.followers : 0,
             dateAdded: _blog.dateAdded != null ? _blog.dateAdded : new Date()
-        });
+        }).then((item) => {
+                _blog.key = item.key;
+                // automatically follow added blog
+                this.follow(_blog);
+            });
     }
 
     updateBlog(_blog: Blog) {
