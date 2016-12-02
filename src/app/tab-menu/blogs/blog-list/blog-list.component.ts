@@ -11,6 +11,7 @@ import { Blog } from '../../../models/blog.model';
 })
 export class BlogListComponent implements OnChanges {
   @Input() blogs: Blog[];
+  @Input() showFollowButton: boolean = false;
   @Output() blogSelected: EventEmitter<Blog> = new EventEmitter<Blog>();
 
   visibleBlogs: Blog[];

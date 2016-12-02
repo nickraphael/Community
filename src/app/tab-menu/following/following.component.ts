@@ -5,38 +5,29 @@ import { BlogService } from '../../services/blog.service'
 import { Blog } from '../../models/blog.model';
 
 @Component({
-  selector: 'app-following',
-  templateUrl: './following.component.html',
-  styleUrls: ['./following.component.css']
+    selector: 'app-following',
+    templateUrl: './following.component.html',
+    styleUrls: ['./following.component.css']
 })
 export class FollowingComponent implements OnInit {
 
-  blogs: Blog[] = [];
-  private blogsSubscription: Subscription;
+    blogs: Blog[] = [];
+    private blogsSubscription: Subscription;
 
-  constructor(private blogService: BlogService) {
+    constructor(private blogService: BlogService) {
 
-  }
+    }
 
-  ngOnInit() {
-    //this.blogService.getFollowedBlogs((blogs: Blog[]) => {
-    //  this.blogs = blogs;
-    //});
+    ngOnInit() {
+        this.blogsSubscription = this.blogService.blogsFollowed$
+            .subscribe((blogs: Blog[]) => {
+                this.blogs = blogs;
+            });
+        this.blogService.getFollowedBlogs();
+    }
 
-    
-    this.blogService.blogsFollowed$.subscribe((blogs: Blog[]) => {
-      this.blogs = blogs;
-    });
-    this.blogService.getFollowedBlogs();
-
-    
-    //this.blogsSubscription = this.blogService.blogsFollowed$.subscribe((blogs: Blog[]) => {
-    //  this.blogs = blogs;
-    //});
-  }
-
-  ngOnDestroy() {
-    //this.blogsSubscription.unsubscribe();
-  }
+    ngOnDestroy() {
+        this.blogsSubscription.unsubscribe();
+    }
 
 }

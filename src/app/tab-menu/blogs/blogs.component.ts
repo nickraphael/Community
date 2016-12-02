@@ -17,6 +17,7 @@ export class BlogsComponent implements OnInit {
     visibleBlogs: Blog[] = [];
     displayEdit: boolean = false;
     visibleRows: number = 2;
+    showFollowButton: boolean = true;
 
     private blogsSubscription: Subscription;
 

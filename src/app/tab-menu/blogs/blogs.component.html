@@ -1,3 +1,3 @@
 <button id="addButton" #loadButton type="text" icon="fa-plus" pButton label="Add New" (click)="addNew()"></button>
-<app-blog-list [blogs]="blogs" (blogSelected)="blogSelected($event)"></app-blog-list>
+<app-blog-list [blogs]="blogs" (blogSelected)="blogSelected($event)" [showFollowButton]="showFollowButton"></app-blog-list>
 <app-edit-blog [blog]="blog" [isVisible]="displayEdit" (visibilityChanged)="blogEditVisibilityChanged($event)"></app-edit-blog>
