@@ -19,11 +19,14 @@ export class FollowingComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.blogsSubscription = this.blogService.blogsFollowed$
+        this.blogsSubscription = this.blogService.blogs$
+            .map((blogs: Blog[]) => {
+                return blogs.filter((blog: Blog) => { return blog.userBlog !== null; } )
+            })
             .subscribe((blogs: Blog[]) => {
                 this.blogs = blogs;
             });
-        this.blogService.getFollowedBlogs();
+        //this.blogService.getFollowedBlogs();
     }
 
     ngOnDestroy() {

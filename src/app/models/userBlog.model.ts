@@ -1,10 +1,12 @@
 
 export class UserBlog {
-    blogKey: string;
+    firebaseKey: string;
 
+    blogKey: string;
     dateAdded: Date;
 
-    constructor(_blogKey: string, _dateAdded: Date) {
+    constructor(_firebaseKey: string, _blogKey: string, _dateAdded: Date) {
+        this.firebaseKey = _firebaseKey;
         this.blogKey = _blogKey;
         this.dateAdded = _dateAdded;
     }

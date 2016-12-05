@@ -7,7 +7,8 @@
         <p-panel>
             <header>
                 {{blog.name}} ({{blog.followers}} followers)
-                <button (click)="follow(blog)" *ngIf="showFollowButton">follow</button>
+                <button (click)="follow(blog)" *ngIf="loginService.user != null && blog.userBlog == null">follow</button>
+                <button (click)="unfollow(blog)" *ngIf="loginService.user != null && blog.userBlog != null">unfollow</button>
             </header>
             <button (click)="editBlog(blog)">edit</button>
             <div class="ui-grid ui-grid-responsive ui-fluid" style="font-size:16px;padding:20px;">

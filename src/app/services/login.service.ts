@@ -11,7 +11,7 @@ type loginProvider =
 export class LoginService {
 
     public user$: ReplaySubject<User> = new ReplaySubject<User>(1);
-    public user: User;
+    public user: User = null;
 
     constructor(private _angularFire: AngularFire) {
         this._angularFire.auth.subscribe(auth => {

@@ -13,54 +13,67 @@ import { UserBlog } from '../models/userBlog.model';
 @Injectable()
 export class BlogService {
 
-    public blogs$: Observable<Blog[]>;
-    public blogsFollowed$: Observable<Blog[]>;
-    public blogsFollowedObserver: Observer<Blog[]> = null;
+    public blogs$: ReplaySubject<Blog[]> = new ReplaySubject<Blog[]>(1);
+
+    private rawBlogs$: Observable<Blog[]>;
+    private userBlogsObserver: Observer<UserBlog[]> = null;
+    private userBlogs$: Observable<UserBlog[]>
 
     private firebaseBlogs$: FirebaseListObservable<Blog[]>;
     private firebaseUserBlogs$: FirebaseListObservable<UserBlog[]> = null;
 
     constructor(private angularFire: AngularFire, private loginService: LoginService) {
+
         this.firebaseBlogs$ = angularFire.database.list('/blogs');
 
-        this.blogsFollowed$ = new Observable<Blog[]>(observer => this.blogsFollowedObserver = observer);
+        this.userBlogs$ = new Observable<UserBlog[]>(observer => this.userBlogsObserver = observer);
 
-        this.blogs$ = this.firebaseBlogs$
+        this.rawBlogs$ = this.firebaseBlogs$
             .map((fireBlogs: any) => {
                 return fireBlogs.map((fireBlog: any) => new Blog(fireBlog.$key, fireBlog.name, fireBlog.url, fireBlog.imageUrl, fireBlog.followers));
             });
 
+        this.setupMergedBlogs();
+
         loginService.user$.subscribe((user: User) => {
             if (user === null) {
-                this.blogsFollowedObserver.next([]);
+                this.userBlogsObserver.next([]);
+                //this.blogs$.next([]);
             }
             else {
                 this.firebaseUserBlogs$ = this.angularFire.database.list('/users/' + user.authKey + '/blogs');
 
-                if (this.blogsFollowedObserver != null) {
-                    this.getFollowedBlogs();
-                }
+                this.angularFire.database.list('/users/' + user.authKey + '/blogs')
+                    .map((fireUserBlogs: any) => {
+                        return fireUserBlogs.map((fireUserBlog: any) => new UserBlog(fireUserBlog.$key, fireUserBlog.blogKey, fireUserBlog.dateAdded));
+                    })
+                    .subscribe((userBlogs: UserBlog[]) => {
+                        this.userBlogsObserver.next(userBlogs);
+                    });
             }
         });
     }
 
-    getFollowedBlogs() {
-        if (this.loginService.user != null) {
-            this.angularFire.database.list('/users/' + this.loginService.user.authKey + '/blogs')
-                .map(followedBlogs => {
-                    return followedBlogs.map(followedBlog => {
-                        return this.angularFire.database.object('/blogs/' + followedBlog.blogKey)
-                    });
+    setupMergedBlogs() {
+
+        Observable.combineLatest(
+            this.rawBlogs$,
+            this.userBlogs$)
+            .map((values: any[]) => {
+                // look in userBlogs to see if blog has been followed
+                let blogs: Blog[] = values[0];
+                let userBlogs: UserBlog[] = values[1];
+
+                return blogs.map((blog: Blog) => {
+                    let filteredUserBlogs: UserBlog[] = userBlogs.filter((userBlog: UserBlog) => { return blog.key === userBlog.blogKey });
+                    blog.userBlog = filteredUserBlogs.length > 0 ? filteredUserBlogs[0] : null;
+                    return blog;
                 })
-                .do(console.log)
-                // map over each array of observable and merge them into one stream and combine the observables into one 
-                .mergeMap((followedBlog$: any) => {
-                    return Observable.combineLatest(followedBlog$)
-                })
-                .subscribe((blogs: Blog[]) => {
-                    this.blogsFollowedObserver.next(blogs);
-                });
-        }
+            })
+            .subscribe((blogs: Blog[]) => {
+                this.blogs$.next(blogs);
+            });
+
     }
 
     addBlog(_blog: Blog) {
@@ -72,10 +85,10 @@ export class BlogService {
             followers: _blog.followers != null ? _blog.followers : 0,
             dateAdded: _blog.dateAdded != null ? _blog.dateAdded : new Date()
         }).then((item) => {
-                _blog.key = item.key;
-                // automatically follow added blog
-                this.follow(_blog);
-            });
+            _blog.key = item.key;
+            // automatically follow added blog
+            this.follow(_blog, () => {});
+        });
     }
 
     updateBlog(_blog: Blog) {
@@ -91,17 +104,31 @@ export class BlogService {
         });
     }
 
-    follow(_blog: Blog) {
+    follow(_blog: Blog, callback: () => void) {
         // add user/blogs entry
         if (this.firebaseUserBlogs$ !== null) {
             this.firebaseUserBlogs$.push({
                 blogKey: _blog.key,
                 dateAdded: new Date().toISOString()
+            }).then(_ => {
+                // update blog entry to increment follow
+                _blog.followers++;
+                this.updateBlog(_blog);
+
+                callback();
             });
         }
+    }
 
-        // update blog entry to increment follow
-        _blog.followers ++;
-        this.updateBlog(_blog);
+    unfollow(_blog: Blog, callback: () => void) {
+        // delete user/blogs entry
+        let nodeToDelete = this.angularFire.database.object('/users/' + this.loginService.user.authKey + '/blogs/' + _blog.userBlog.firebaseKey);
+        nodeToDelete.remove().then(_ => {
+            // update blog entry to increment follow
+            _blog.followers--;
+            this.updateBlog(_blog);
+
+            callback();
+        });
     }
 }

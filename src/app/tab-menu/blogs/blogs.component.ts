@@ -20,12 +20,13 @@ export class BlogsComponent implements OnInit {
     showFollowButton: boolean = true;
 
     private blogsSubscription: Subscription;
+    private followedBlogsSubscription: Subscription;
 
-    constructor(private _blogService: BlogService) {
+    constructor(private blogService: BlogService) {
     }
 
     ngOnInit() {
-        this.blogsSubscription = this._blogService.blogs$.subscribe((blogs: Blog[]) => {
+        this.blogsSubscription = this.blogService.blogs$.subscribe((blogs: Blog[]) => {
             this.blogs = blogs;
         });
     }
