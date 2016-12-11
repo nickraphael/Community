@@ -1,0 +1,13 @@
+
+[md-card-md-image] {
+    border-radius: 12px;
+}
+
+md-card {
+    background-color: palegreen;
+    border-radius: 12px;
+}
+
+md-card-actions {
+    text-align: center;
+}

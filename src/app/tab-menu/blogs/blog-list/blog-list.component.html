@@ -1,45 +1,37 @@
 <p-dataScroller [value]="visibleBlogs" [rows]=2 [loader]="loadButton" (onLazyLoad)="loadData($event)" [lazy]="true">
     <header>
         Click Load Button at Footer to Load More
-    </header>    
+    </header>
     <template let-blog>
         <br/>
-        <p-panel>
-            <header>
-                {{blog.name}} ({{blog.followers}} followers)
-                <button (click)="follow(blog)" *ngIf="loginService.user != null && blog.userBlog == null">follow</button>
-                <button (click)="unfollow(blog)" *ngIf="loginService.user != null && blog.userBlog != null">unfollow</button>
-            </header>
-            <button (click)="editBlog(blog)">edit</button>
-            <div class="ui-grid ui-grid-responsive ui-fluid" style="font-size:16px;padding:20px;">
-                <div class="ui-grid-row">
-                    <div class="ui-grid-col-3" style="text-align:center">
-                        <img *ngIf="blog.imageUrl != null" class="blogThumbnail" style="height: 100px" [src]="blog.imageUrl">
-                    </div>
-                    <div class="ui-grid-col-9">
-                        <div class="ui-grid ui-grid-responsive ui-fluid">
-                            <div class="ui-grid-row">
-                                <div class="ui-grid-col-2">Name: </div>
-                                <div class="ui-grid-col-10">
-                                    <a [href]="blog.url" target="new">{{blog.name}}</a></div>
-                            </div>
-                            <div class="ui-grid-row">
-                                <div class="ui-grid-col-2">Date Added: </div>
-                                <div class="ui-grid-col-10">{{blog.dateAdded}}</div>
-                            </div>
-                            <div class="ui-grid-row">
-                                <div class="ui-grid-col-2">Authors: </div>
-                                <div class="ui-grid-col-10">{{blog.authors}}</div>
-                            </div>
-                            <div class="ui-grid-row">
-                                <div class="ui-grid-col-2">Url: </div>
-                                <div class="ui-grid-col-10">{{blog.url}}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </p-panel>
+        <md-card>
+            <md-card-title-group>
+                <img *ngIf="blog.imageUrl != null" md-card-md-image [src]="blog.imageUrl">
+
+                <md-card-title>{{blog.name}}</md-card-title>
+                <md-card-subtitle>
+                    <div *ngIf="blog.followers != null">Followers: {{blog.followers}}</div>
+                    <div *ngIf="blog.authors != null">Authors: {{blog.authors}}</div>
+                    <div *ngIf="blog.dateAdded != null">Date added: {{blog.dateAdded | date:'medium'}}</div>
+                    <div *ngIf="blog.createdBy != null">Added by: {{blog.createdBy}}</div>
+                </md-card-subtitle>
+            </md-card-title-group>
+            <md-card-actions>
+                <button md-mini-fab (click)="follow(blog)" *ngIf="loginService.user != null && blog.userBlog == null" md-tooltip="Follow this blog">
+                    <md-icon class="md-24">visibility</md-icon>
+                </button>
+                <button md-mini-fab (click)="unfollow(blog)" *ngIf="loginService.user != null && blog.userBlog != null" md-tooltip="Unfollow this blog">
+                    <md-icon class="md-24">visibility_off</md-icon>
+                </button>
+                <button md-mini-fab (click)="editBlog(blog)" md-tooltip="Edit this blog">
+                    <md-icon class="md-24">mode_edit</md-icon>
+                </button>
+            </md-card-actions>
+        </md-card>
+
+
+
+
     </template>
     <footer>
         <button #loadButton type="text" icon="fa-refresh" pButton label="Load"></button>
