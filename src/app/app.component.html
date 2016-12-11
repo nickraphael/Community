@@ -1,9 +1,13 @@
 <p-growl [value]="_GrowlService.messages" life="5000"></p-growl>
-<h1>
-  {{title}}
-</h1>
-<app-login></app-login>
-<div> {{ user?.displayName }} </div>
-<img style="height: 70px;" [src]="user?.photoUrl" [hidden]="user == null">
-<button (click)="logout()">Logout</button>
-<app-tab-menu></app-tab-menu>
+
+
+
+<main [ngClass]="{'menu-collapsed': isMenuCollapsed}" baThemeRun>
+  <div class="additional-bg"></div>
+  <app-login></app-login>
+  <div> {{ user?.displayName }} </div>
+  <img style="height: 70px;" [src]="user?.photoUrl" [hidden]="user == null">
+  <button (click)="logout()">Logout</button>
+  <app-tab-menu></app-tab-menu>
+  <router-outlet></router-outlet>
+</main>

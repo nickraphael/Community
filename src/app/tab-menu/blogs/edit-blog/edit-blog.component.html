@@ -1,15 +1,40 @@
-<p-dialog header="New Blog" (onBeforeShow)="onBeforeShow()" (onBeforeHide)="onBeforeHide()" [(visible)]="isVisible" [responsive]="true" showEffect="fade" [modal]="true" width="425">
+<p-dialog (onBeforeShow)="onBeforeShow()" (onBeforeHide)="onBeforeHide()" [(visible)]="isVisible" [responsive]="true" showEffect="fade"
+  [modal]="true" width="425">
   <form [formGroup]="blogForm" (ngSubmit)="onSubmitForm()">
-    <h2>Blog Form</h2>
+    <md-card>
+      <md-card-header>
+        <md-card-title-group>
+          <img *ngIf="blogForm.controls.imageUrl.value != ''" md-card-sm-image [src]="blogForm.controls.imageUrl.value">
+          <md-card-title>{{title}}
+            <md-icon>{{addMode ? 'add' : 'mode_edit'}}</md-icon>
+          </md-card-title>
+          <md-card-subtitle *ngIf="!addMode" style="font-size: xx-small;">
+            {{blog?.followers}} followers
+            <br/>
+            Created by {{blog?.createdBy}} on {{blog?.dateAdded | date:'medium'}}</md-card-subtitle>
+        </md-card-title-group>
+      </md-card-header>
+      <md-card-content>
+        <md-input placeholder="Title/Name" maxlength="100" #name formControlName="name" style="width: 340px" [dividerColor]="blogForm.controls.name.errors ? 'warn' : 'primary'"></md-input>
+        <div *ngIf="blogForm.controls.name.touched && blogForm.controls.name.errors?.required">This field is required!</div>
+        <br/>
+        <md-input placeholder="Web address" maxlength="100" formControlName="url" #url style="width: 340px" [dividerColor]="blogForm.controls.url.errors ? 'warn' : 'primary'"></md-input>
+        <div *ngIf="blogForm.controls.url.touched && blogForm.controls.url.errors?.required">This field is required!</div>
+        <div *ngIf="blogForm.controls.url.touched && blogForm.controls.url.errors?.url">Please enter a valid web address</div>
+        <br/>
+        <md-input placeholder="Image web address" maxlength="500" formControlName="imageUrl" #imageUrl style="width: 340px" [dividerColor]="blogForm.controls.imageUrl.errors ? 'warn' : 'primary'"></md-input>
+        <div *ngIf="blogForm.controls.url.touched && blogForm.controls.imageUrl.errors?.url">Please enter a valid web address</div>
+        <br/>
+        <md-input placeholder="Author(s)" maxlength="500" #authors formControlName="authors" style="width: 340px" [dividerColor]="blogForm.controls.authors.errors ? 'warn' : 'primary'"></md-input>
+        <br/>
+      </md-card-content>
+      <md-card-actions>
+        <button type="submit" md-raised-button [color]="primary" [disabled]="blogForm.pristine || !blogForm.valid">Save</button>
+        <button type="button" md-raised-button [color]="primary" (click)="closeDialog()">Cancel</button>
+      </md-card-actions>
+      <md-card-footer>
 
-    <label for="name">Name:</label>
-    <input id="name" type="text" formControlName="name">
-    <p *ngIf="!blogForm.controls.name.pristine && blogForm.controls.name.errors">This field is required!</p>
-
-    <label for="url">Url:</label>
-    <input id="url" type="text" formControlName="url">
-    <p *ngIf="!blogForm.controls.url.pristine && blogForm.controls.url.errors">This field is required!</p>
-
-    <button type="submit">Submit</button>
+      </md-card-footer>
+    </md-card>
   </form>
 </p-dialog>

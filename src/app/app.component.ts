@@ -15,6 +15,7 @@ import { User } from './models/user.model';
 export class AppComponent {
     title = 'ngCommunity';
     user: User = null;
+    isMenuCollapsed: boolean = false;
 
     growlMessages: Growl[];
 
@@ -23,6 +24,8 @@ export class AppComponent {
             this.user = user;
         });
     }
+
+    
 
     logout() {
         this._loginService.logout();

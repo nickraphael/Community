@@ -36,7 +36,7 @@ export class BlogsComponent implements OnInit {
     }
 
     addNew() {
-        this.blog = new Blog('', '', '', '', 0);
+        this.blog = new Blog({});
         this.displayEdit = true;
     }
 
@@ -46,8 +46,8 @@ export class BlogsComponent implements OnInit {
     }
 
     blogEditVisibilityChanged(isVisible) {
-        this.blog = null;
         this.displayEdit = isVisible;
+        this.blog = null;
     }
 
 }

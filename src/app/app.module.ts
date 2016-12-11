@@ -7,6 +7,8 @@ import { HttpModule } from '@angular/http';
 
 import { ButtonModule, TabMenuModule, DataScrollerModule, PanelModule, DialogModule, GrowlModule } from 'primeng/primeng';
 import { AngularFireModule, AuthProviders, AuthMethods } from 'angularfire2';
+import { MaterialModule } from '@angular/material';
+import { CustomFormsModule } from 'ng2-validation'
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule  } from './app-routing.module';
@@ -47,6 +49,8 @@ const myFirebaseAuthConfig = {
     BlogListComponent
   ],
   imports: [
+    MaterialModule.forRoot(),
+    CustomFormsModule,
     BrowserModule,
     FormsModule,
     HttpModule,

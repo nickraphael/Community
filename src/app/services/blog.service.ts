@@ -30,7 +30,18 @@ export class BlogService {
 
         this.rawBlogs$ = this.firebaseBlogs$
             .map((fireBlogs: any) => {
-                return fireBlogs.map((fireBlog: any) => new Blog(fireBlog.$key, fireBlog.name, fireBlog.url, fireBlog.imageUrl, fireBlog.followers));
+                return fireBlogs.map((fireBlog: any) => { 
+                    return {
+                       key: fireBlog.$key,
+                       name: fireBlog.name,
+                       url: fireBlog.url,
+                       imageUrl: fireBlog.imageUrl,
+                       authors: fireBlog.authors,
+                       followers: fireBlog.followers,
+                       createdBy: fireBlog.createdBy,
+                       dateAdded: new Date()
+                    };
+                })
             });
 
         this.setupMergedBlogs();
@@ -38,7 +49,6 @@ export class BlogService {
         loginService.user$.subscribe((user: User) => {
             if (user === null) {
                 this.userBlogsObserver.next([]);
-                //this.blogs$.next([]);
             }
             else {
                 this.firebaseUserBlogs$ = this.angularFire.database.list('/users/' + user.authKey + '/blogs');
@@ -83,6 +93,7 @@ export class BlogService {
             url: _blog.url != null ? _blog.url : '',
             imageUrl: _blog.imageUrl != null ? _blog.imageUrl : '',
             followers: _blog.followers != null ? _blog.followers : 0,
+            createdBy: this.loginService.user.displayName,
             dateAdded: _blog.dateAdded != null ? _blog.dateAdded : new Date()
         }).then((item) => {
             _blog.key = item.key;
@@ -95,13 +106,7 @@ export class BlogService {
         //update blog in db
         let value = this.angularFire.database.object('/blogs/' + _blog.key);
 
-        return value.update({
-            name: _blog.name,
-            url: _blog.url != null ? _blog.url : '',
-            imageUrl: _blog.imageUrl != null ? _blog.imageUrl : '',
-            followers: _blog.followers != null ? _blog.followers : 0,
-            dateAdded: _blog.dateAdded != null ? _blog.dateAdded : new Date().toISOString()
-        });
+        return value.update(_blog);
     }
 
     follow(_blog: Blog, callback: () => void) {
