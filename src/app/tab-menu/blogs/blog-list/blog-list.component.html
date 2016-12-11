@@ -12,7 +12,7 @@
                 <md-card-subtitle>
                     <div *ngIf="blog.followers != null">Followers: {{blog.followers}}</div>
                     <div *ngIf="blog.authors != null">Authors: {{blog.authors}}</div>
-                    <div *ngIf="blog.dateAdded != null">Date added: {{blog.dateAdded | date:'medium'}}</div>
+                    <div *ngIf="blog.dateAdded != null">Date added: {{blog.dateAdded | date:'short'}}</div>
                     <div *ngIf="blog.createdBy != null">Added by: {{blog.createdBy}}</div>
                 </md-card-subtitle>
             </md-card-title-group>
