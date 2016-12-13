@@ -9,6 +9,10 @@ md-card {
     max-width: 400px;
 }
 
-md-card-actions {
-    text-align: center;
+md-card > md-card-actions {
+    padding-left: 8px;
+}
+
+[md-raised-button] {
+    border-radius: 9px;
 }

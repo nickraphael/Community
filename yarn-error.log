@@ -1,0 +1,80 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\Nick\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js install
+
+PATH: 
+  C:\Program Files\Common Files\Microsoft Shared\Windows Live;C:\Program Files (x86)\Common Files\Microsoft Shared\Windows Live;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files (x86)\Windows Live\Shared;C:\Program Files (x86)\Microsoft ASP.NET\ASP.NET Web Pages\v1.0\;C:\Program Files\Microsoft SQL Server\110\Tools\Binn\;C:\Program Files (x86)\QuickTime\QTSystem\;C:\Program Files (x86)\Windows Kits\8.1\Windows Performance Toolkit\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\Microsoft\Web Platform Installer\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\Microsoft SQL Server\120\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\130\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\130\Tools\Binn\ManagementStudio\;C:\Program Files (x86)\Microsoft Emulator Manager\1.0\;C:\Program Files\Git\cmd;C:\Program Files\dotnet\;C:\Program Files\Microsoft DNX\Dnvm\;C:\Program Files\nodejs\;C:\Users\Nick\.dnx\runtimes\dnx-clr-win-x86.1.0.0-rc1-update2\bin;C:\Users\Nick\.dnx\bin;C:\Program Files (x86)\Microsoft VS Code\bin;C:\Users\Nick\AppData\Local\Microsoft\WindowsApps;C:\Users\Nick\AppData\Roaming\npm
+
+Yarn version: 
+  0.17.10
+
+Node version: 
+  6.9.1
+
+Platform: 
+  win32 x64
+
+npm manifest: 
+  {
+    "name": "Community",
+    "version": "0.0.0",
+    "license": "MIT",
+    "angular-cli": {},
+    "scripts": {
+      "start": "ng serve",
+      "lint": "tslint \"src/**/*.ts\"",
+      "test": "ng test",
+      "pree2e": "webdriver-manager update",
+      "e2e": "protractor"
+    },
+    "private": true,
+    "dependencies": {
+      "@angular/common": "~2.3.0",
+      "@angular/compiler": "~2.3.0",
+      "@angular/core": "~2.3.0",
+      "@angular/forms": "~2.3.0",
+      "@angular/http": "~2.3.0",
+      "@angular/material": "^2.0.0-alpha.11-2",
+      "@angular/platform-browser": "~2.3.0",
+      "@angular/platform-browser-dynamic": "~2.3.0",
+      "@angular/router": "~3.1.0",
+      "angularfire2": "^2.0.0-beta.6",
+      "core-js": "^2.4.1",
+      "firebase": "^3.6.1",
+      "font-awesome": "^4.7.0",
+      "hammerjs": "^2.0.8",
+      "ng2-validation": "^3.0.1",
+      "primeng": "^1.0.0-rc.4",
+      "rxjs": "5.0.0-beta.12",
+      "ts-helpers": "^1.1.1",
+      "zone.js": "^0.6.23"
+    },
+    "devDependencies": {
+      "@types/hammerjs": "^2.0.33",
+      "@types/jasmine": "^2.5.38",
+      "@types/node": "^6.0.42",
+      "angular-cli": "1.0.0-beta.19-3",
+      "codelyzer": "1.0.0-beta.1",
+      "jasmine-core": "2.4.1",
+      "jasmine-spec-reporter": "2.5.0",
+      "karma": "1.2.0",
+      "karma-chrome-launcher": "^2.0.0",
+      "karma-cli": "^1.0.1",
+      "karma-jasmine": "^1.0.2",
+      "karma-remap-istanbul": "^0.2.1",
+      "protractor": "4.0.9",
+      "ts-node": "1.2.1",
+      "tslint": "3.13.0",
+      "typescript": "~2.0.3",
+      "webdriver-manager": "10.2.5"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
+
+Trace: 
+  Error: EPERM: operation not permitted, unlink 'd:\Projects\Community-master\node_modules\@angular\http\src\facade\collection.d.ts'
+      at Error (native)

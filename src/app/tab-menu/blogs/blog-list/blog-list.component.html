@@ -17,23 +17,19 @@
                 </md-card-subtitle>
             </md-card-title-group>
             <md-card-actions>
-                <button md-mini-fab (click)="follow(blog)" *ngIf="loginService.user != null && blog.userBlog == null" md-tooltip="Follow this blog">
-                    <md-icon class="md-24">visibility</md-icon>
+                <button md-raised-button color="primary" (click)="follow(blog)" *ngIf="loginService.user != null && blog.userBlog == null">
+                    <md-icon class="md-24">visibility</md-icon> follow
                 </button>
-                <button md-mini-fab (click)="unfollow(blog)" *ngIf="loginService.user != null && blog.userBlog != null" md-tooltip="Unfollow this blog">
-                    <md-icon class="md-24">visibility_off</md-icon>
+                <button md-raised-button color="primary" (click)="unfollow(blog)" *ngIf="loginService.user != null && blog.userBlog != null">
+                    <md-icon class="md-24">visibility_off</md-icon> unfollow
                 </button>
-                <button md-mini-fab (click)="editBlog(blog)" md-tooltip="Edit this blog">
-                    <md-icon class="md-24">mode_edit</md-icon>
+                <button md-raised-button color="primary" (click)="editBlog(blog)" md-tooltip="Edit this blog">
+                    <md-icon class="md-24">mode_edit</md-icon> edit
                 </button>
             </md-card-actions>
         </md-card>
-
-
-
-
     </template>
     <footer>
-        <button #loadButton type="text" icon="fa-refresh" pButton label="Load"></button>
+        <button #loadButton type="text" pButton label="load more"></button>
     </footer>
 </p-dataScroller>

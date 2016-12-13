@@ -9,6 +9,7 @@ import { ButtonModule, TabMenuModule, DataScrollerModule, PanelModule, DialogMod
 import { AngularFireModule, AuthProviders, AuthMethods } from 'angularfire2';
 import { MaterialModule } from '@angular/material';
 import { CustomFormsModule } from 'ng2-validation'
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule  } from './app-routing.module';
@@ -64,7 +65,8 @@ const myFirebaseAuthConfig = {
     ButtonModule,
     DialogModule,
     GrowlModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FlexLayoutModule.forRoot()
   ],
   providers: [AngularFireModule, BlogService, GrowlService, LoginService],
   bootstrap: [AppComponent]
