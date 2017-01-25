@@ -1,35 +1,26 @@
-<p-dataScroller [value]="visibleBlogs" [rows]=2 [loader]="loadButton" (onLazyLoad)="loadData($event)" [lazy]="true">
-    <header>
-        Click Load Button at Footer to Load More
-    </header>
-    <template let-blog>
-        <br/>
-        <md-card>
-            <md-card-title-group>
-                <img *ngIf="blog.imageUrl != null" md-card-md-image [src]="blog.imageUrl">
+<br/>
 
-                <md-card-title>{{blog.name}}</md-card-title>
-                <md-card-subtitle>
-                    <div *ngIf="blog.followers != null">Followers: {{blog.followers}}</div>
-                    <div *ngIf="blog.authors != null">Authors: {{blog.authors}}</div>
-                    <div *ngIf="blog.dateAdded != null">Date added: {{blog.dateAdded | date:'short'}}</div>
-                    <div *ngIf="blog.createdBy != null">Added by: {{blog.createdBy}}</div>
-                </md-card-subtitle>
-            </md-card-title-group>
-            <md-card-actions>
-                <button md-raised-button color="primary" (click)="follow(blog)" *ngIf="loginService.user != null && blog.userBlog == null">
+<md-card *ngFor="let blog of blogs;">
+    <md-card-title-group>
+        <img class="blogImage" *ngIf="blog.imageUrl != null" md-card-md-image [src]="blog.imageUrl">
+
+        <md-card-title>{{blog.name}}</md-card-title>
+        <md-card-subtitle>
+            <div *ngIf="blog.followers != null">Followers: {{blog.followers}}</div>
+            <div *ngIf="blog.authors != null">Authors: {{blog.authors}}</div>
+            <div *ngIf="blog.dateAdded != null">Date added: {{blog.dateAdded | date:'short'}}</div>
+            <div *ngIf="blog.createdBy != null">Added by: {{blog.createdBy}}</div>
+        </md-card-subtitle>
+    </md-card-title-group>
+    <md-card-actions>
+        <button md-raised-button color="primary" (click)="follow(blog)" *ngIf="loginService.user != null && blog.userBlog == null">
                     <md-icon class="md-24">visibility</md-icon> follow
                 </button>
-                <button md-raised-button color="primary" (click)="unfollow(blog)" *ngIf="loginService.user != null && blog.userBlog != null">
+        <button md-raised-button color="primary" (click)="unfollow(blog)" *ngIf="loginService.user != null && blog.userBlog != null">
                     <md-icon class="md-24">visibility_off</md-icon> unfollow
                 </button>
-                <button md-raised-button color="primary" (click)="editBlog(blog)" md-tooltip="Edit this blog">
+        <button md-raised-button color="primary" (click)="editBlog(blog)" md-tooltip="Edit this blog">
                     <md-icon class="md-24">mode_edit</md-icon> edit
                 </button>
-            </md-card-actions>
-        </md-card>
-    </template>
-    <footer>
-        <button #loadButton type="text" pButton label="load more"></button>
-    </footer>
-</p-dataScroller>
+    </md-card-actions>
+</md-card>

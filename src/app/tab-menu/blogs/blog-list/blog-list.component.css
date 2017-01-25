@@ -6,7 +6,8 @@
 md-card {
     background-color: palegreen;
     border-radius: 12px;
-    max-width: 400px;
+    max-width: 700px;
+    margin:10px
 }
 
 md-card > md-card-actions {
@@ -15,4 +16,10 @@ md-card > md-card-actions {
 
 [md-raised-button] {
     border-radius: 9px;
+}
+
+.blogImage {
+    border: darkslategray;
+    border-width: 1px;
+    border-style: solid;
 }

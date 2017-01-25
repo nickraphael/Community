@@ -10,6 +10,7 @@ import { AngularFireModule, AuthProviders, AuthMethods } from 'angularfire2';
 import { MaterialModule } from '@angular/material';
 import { CustomFormsModule } from 'ng2-validation'
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { Angular2DataTableModule } from 'angular2-data-table';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule  } from './app-routing.module';
@@ -51,6 +52,7 @@ const myFirebaseAuthConfig = {
   ],
   imports: [
     MaterialModule.forRoot(),
+    Angular2DataTableModule,
     CustomFormsModule,
     BrowserModule,
     FormsModule,

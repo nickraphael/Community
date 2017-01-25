@@ -12,7 +12,7 @@ import { Growl } from '../../../models/growl.model';
   templateUrl: './blog-list.component.html',
   styleUrls: ['./blog-list.component.css']
 })
-export class BlogListComponent implements OnChanges {
+export class BlogListComponent {
   @Input() blogs: Blog[];
   @Output() blogSelected: EventEmitter<Blog> = new EventEmitter<Blog>();
 
@@ -24,21 +24,6 @@ export class BlogListComponent implements OnChanges {
   constructor(private _blogService: BlogService,
     public loginService: LoginService,
     private _GrowlService: GrowlService) { }
-
-  ngOnChanges() {
-    this.displayRows();
-  }
-
-  displayRows() {
-    this.visibleBlogs = this.blogs.slice(0, this.visibleRows);
-  }
-
-  loadData(event) {
-    if (this.blogs.length > 0) {
-      this.visibleRows = this.visibleRows + event.rows;
-      this.displayRows();
-    }
-  }
 
   editBlog(blog: Blog) {
     this.blogSelected.next(blog);
